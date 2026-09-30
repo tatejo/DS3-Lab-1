@@ -1,0 +1,62 @@
+# SignalScope UML Class Diagram
+
+The diagram uses Mermaid UML-style syntax. Paste it into a Mermaid-compatible editor and export it as an image or PDF for submission.
+
+```mermaid
+classDiagram
+    class SignalBuffer~T~ {
+        -T* data_
+        -size_t size_
+        -size_t capacity_
+        -bool sorted_
+        -updateSortedState() void
+        +SignalBuffer(capacity)
+        +SignalBuffer(other)
+        +~SignalBuffer()
+        +operator=(other) SignalBuffer&
+        +append(value) bool
+        +operator+=(value) SignalBuffer&
+        +sortData() void
+        +isSorted() bool
+        +empty() bool
+        +size() size_t
+        +capacity() size_t
+        +operator[](index) T&
+        +data() const T*
+        +operator<<(out, buffer) ostream&
+    }
+
+    class SearchReport {
+        -string algorithm_
+        -int index_
+        -long long comparisons_
+        -long long timeMicroseconds_
+        -string message_
+        +SearchReport(algorithm, index, comparisons, time, message)
+        +algorithm() string
+        +index() int
+        +comparisons() long long
+        +timeMicroseconds() long long
+        +message() string
+        +found() bool
+        +operator<<(out, report) ostream&
+    }
+
+    class SearchAlgorithms {
+        <<template functions>>
+        +linearSearch~T~(values, size, target) SearchReport
+        +binarySearch~T~(values, size, target, sorted) SearchReport
+        +ternarySearch~T~(values, size, target, sorted) SearchReport
+        +interpolationSearch~T~(values, size, target, sorted) SearchReport
+    }
+
+    SearchAlgorithms ..> SearchReport : creates reports
+    SearchAlgorithms ..> SignalBuffer : receives buffer data
+```
+
+## Design notes
+
+- `-` indicates private members and `+` indicates public members.
+- `SignalBuffer<T>` owns the dynamic array and tracks both current size and capacity.
+- `SearchReport` stores the algorithm name, result index, comparison count, elapsed time, and an optional validation message.
+- The search algorithms are function templates, so they can be instantiated for both `int` and `double`.
