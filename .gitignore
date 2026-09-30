@@ -1,0 +1,4 @@
+signalscope
+signalscope.exe
+*.o
+.vscode/
